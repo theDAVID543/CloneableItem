@@ -1,8 +1,9 @@
 package thedavid.cloneableitem.scheduler;
 
-import com.github.stefvanschie.inventoryframework.gui.GuiItem;
-import org.bukkit.inventory.ItemStack;
 import thedavid.cloneableitem.CloneableItem;
+import thedavid.cloneableitem.handler.GuiHandler;
+
+import static thedavid.cloneableitem.manager.CloningPlayerManager.cloningPlayers;
 
 public class CloneItem extends org.bukkit.scheduler.BukkitRunnable{
 	CloneableItem cloneableItem;
@@ -11,26 +12,10 @@ public class CloneItem extends org.bukkit.scheduler.BukkitRunnable{
 	}
 	@Override
 	public void run(){
-		cloneableItem.cloneItemCommand.cloningPlayers.forEach((player, cloningPlayer) -> {
-			if(cloningPlayer.isCloningItem){
+		cloningPlayers.forEach((player, cloningPlayer) -> {
+			if(cloningPlayer.isCloningItem && cloningPlayer.clonedAmount < 2560){
 				cloningPlayer.clonedAmount++;
-				if(cloningPlayer.isOpeningGui){
-					int stackAmount = cloningPlayer.clonedAmount / cloningPlayer.item.getMaxStackSize();
-					int remainder = cloningPlayer.clonedAmount % cloningPlayer.item.getMaxStackSize();
-					cloningPlayer.clonedItemsPane.clear();
-					cloningPlayer.clonedItems.clear();
-					for(int i = 0; i < stackAmount; i++){
-						ItemStack itemStack = new ItemStack(cloningPlayer.type, cloningPlayer.item.getMaxStackSize());
-						GuiItem guiItem = new GuiItem(itemStack);
-						cloningPlayer.clonedItemsPane.addItem(guiItem);
-						cloningPlayer.clonedItems.put(guiItem.getItem(), guiItem);
-					}
-					ItemStack itemStack = new ItemStack(cloningPlayer.type, remainder);
-					GuiItem guiItem = new GuiItem(itemStack);
-					cloningPlayer.clonedItemsPane.addItem(guiItem);
-					cloningPlayer.clonedItems.put(guiItem.getItem(), guiItem);
-					cloningPlayer.gui.update();
-				}
+				GuiHandler.updateItemAmount(cloningPlayer);
 			}
 		});
 	}

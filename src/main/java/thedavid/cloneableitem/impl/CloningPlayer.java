@@ -4,13 +4,13 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
 public class CloningPlayer{
-	public Player player;
+	public OfflinePlayer player;
 	public Material type;
 	public ItemStack item;
 	public ChestGui gui;
@@ -19,9 +19,8 @@ public class CloningPlayer{
 	public OutlinePane clonedItemsPane;
 	public int clonedAmount = 0;
 	public HashMap<ItemStack, GuiItem> clonedItems = new HashMap<>();
-	public CloningPlayer(Player player, ChestGui gui){
+	public CloningPlayer(OfflinePlayer player){
 		this.player = player;
-		this.gui = gui;
 	}
 	public void setItem(ItemStack item){
 		this.item = item.asOne();
@@ -29,8 +28,6 @@ public class CloningPlayer{
 		isCloningItem = true;
 	}
 	public void unsetItem(){
-		item = null;
-		type = null;
 		isCloningItem = false;
 	}
 }
